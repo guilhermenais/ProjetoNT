@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formatador de Texto HTML para Notas Técnicas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos adicionais para melhorar a responsividade */
+        @media (max-width: 640px) {
+            .container-mobile {
+                padding: 1rem;
+                margin: 0.5rem;
+            }
+            .text-mobile {
+                font-size: 0.9rem;
+            }
+            .btn-mobile {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-400">
+    <div class="container mx-auto px-4 py-8 flex items-center justify-center min-h-screen">
+        <div class="bg-blue-200 p-4 md:p-8 rounded-lg shadow-lg w-full max-w-4xl container-mobile">
+            <div class="bg-blue-500 text-black p-3 md:p-4 rounded mb-4 md:mb-6">
+                <h1 class="text-xl md:text-2xl font-bold text-center text-mobile">Formatador de Texto HTML para Notas Técnicas</h1>
+            </div>
+            
+            <div class="mb-4 md:mb-6">
+                <label for="resumo" class="block font-semibold mb-2 text-mobile">Resumo da Nota Técnica:</label>
+                <textarea id="resumo" class="w-full p-3 border border-gray-300 rounded resize-none text-mobile" rows="4"></textarea>
+            </div>
+            
+            <div class="mb-4 md:mb-6">
+                <label for="detalhes" class="block font-semibold mb-2 text-mobile">Detalhes da Nota Técnica:</label>
+                <textarea id="detalhes" class="w-full p-3 border border-gray-300 rounded resize-none text-mobile" rows="6"></textarea>
+            </div>
+            
+            <div class="mb-4 md:mb-6">
+                <label for="questoes" class="block font-semibold mb-2 text-mobile">Questões:</label>
+                <textarea id="questoes" class="w-full p-3 border border-gray-300 rounded resize-none text-mobile" rows="4"></textarea>
+            </div>
+            
+            <div class="mb-4 md:mb-6">
+                <label for="parametros" class="block font-semibold mb-2 text-mobile">Parâmetros Envolvidos:</label>
+                <textarea id="parametros" class="w-full p-3 border border-gray-300 rounded resize-none text-mobile" rows="3"></textarea>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4 mt-4 md:mt-6">
+                <button onclick="formatarTexto()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 btn-mobile">Formatar Texto</button>
+                <button onclick="copiarTexto()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 btn-mobile">Copiar HTML</button>
+            </div>
+            
+            <div class="mt-4 md:mt-6">
+                <label for="saidaTexto" class="block font-semibold mb-2 text-mobile">Preview NT:</label>
+                <div class="output bg-gray-50 border border-gray-300 rounded p-3 md:p-4 text-mobile" id="saidaTexto"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function adicionarQuebrasLinha(texto) {
+            return texto.replace(/\n/g, '<br>');
+        }
+
+        function adicionarNegrito(texto) {
+            return texto.replace(/\*([^*]*)\*/g, '<strong>$1</strong>');
+        }
+
+        function copiarTexto() {
+            const saidaTexto = document.getElementById('saidaTexto');
+            const textoFormatado = saidaTexto.innerHTML.trim();
+            
+            if (!textoFormatado) {
+                alert('Nenhum texto formatado para copiar!');
+                return;
+            }
+            
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = textoFormatado;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            alert('Texto copiado para a área de transferência!');
+        }
+
+        function formatarTexto() {
+            const resumo = document.getElementById('resumo').value.trim();
+            const detalhes = document.getElementById('detalhes').value.trim();
+            const questoes = document.getElementById('questoes').value.trim();
+            const parametros = document.getElementById('parametros').value.trim();
+
+            const resumoFormatado = adicionarQuebrasLinha(resumo);
+            const detalhesFormatado = adicionarQuebrasLinha(detalhes);
+            const questoesFormatado = adicionarQuebrasLinha(questoes);
+            const parametrosFormatado = adicionarQuebrasLinha(parametros);
+
+            const textoFormatado = `
+<h4><strong>Resumo da Nota Técnica</strong></h4>
+<p>${adicionarNegrito(resumoFormatado)}</p>
+<h4><strong>Detalhes da Nota Técnica</strong></h4>
+<p>${adicionarNegrito(detalhesFormatado)}</p>
+<p><strong>Questões:</strong><br></p>
+<p>${adicionarNegrito(questoesFormatado)}</p>
+<h4><strong>Parâmetros Envolvidos</strong></h4>
+<p>${adicionarNegrito(parametrosFormatado)}</p>
+            `.trim();
+
+            const saidaTexto = document.getElementById('saidaTexto');
+            saidaTexto.innerHTML = textoFormatado;
+        }
+    </script>
+</body>
+</html>
